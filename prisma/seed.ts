@@ -1,11 +1,12 @@
 import { prisma } from "../lib/prisma";
+import { convertSlug } from "../lib/slug";
 import { seedDataProducts } from "../modules/products/data";
 
 async function seedProducts() {
   for (const seedDataProduct of seedDataProducts) {
     const { category, ...product } = seedDataProduct;
 
-    const categorySlug = category.toLowerCase().replaceAll(" ", "-");
+    const categorySlug = convertSlug(category);
 
     const productData = {
       ...product,
