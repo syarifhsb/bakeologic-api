@@ -2,10 +2,13 @@
   "name": "chez-syarif-api",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
+    "build": "bun install && bun db:migrate:deploy && bun db:gen:prod",
     "start": "bun run src/index.ts",
     "docker:up": "docker compose up -d",
-    "db:gen": "prisma generate --no-hints",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:gen": "prisma generate --no-hints",
+    "db:gen:prod": "prisma generate --no-hints --generator client --generator zod",
     "db:studio": "prisma studio",
     "db:seed": "prisma db seed"
   },
