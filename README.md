@@ -30,44 +30,44 @@ Categories:
 
 Copy `.env.example` to `.env` and fill in the values:
 
-```bash
-$ cp .env.example .env
+```sh
+cp .env.example .env
 ```
 
 Setup the database:
 
-```bash
-$ bun docker:up
+```sh
+bun docker:up
 ```
 
 Install dependencies:
 
-```bash
-$ bun install
+```sh
+bun install
 ```
 
 Migrate the database:
 
-```bash
-$ bun db:migrate
+```sh
+bun db:migrate
 ```
 
 Generate the Prisma Client:
 
-```bash
-$ bun db:gen
+```sh
+bun db:gen
 ```
 
 Seed the database:
 
-```bash
-$ bun db:seed
+```sh
+bun db:seed
 ```
 
 Run development server:
 
-```bash
-$ bun dev
+```sh
+bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
