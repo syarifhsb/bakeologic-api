@@ -11,5 +11,8 @@ COPY . .
 # Install app dependencies
 RUN bun install
 
+# Generate Prisma
+RUN bun db:migrate:deploy
+
 # Run the application
 CMD ["bun", "start"]

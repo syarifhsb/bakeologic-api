@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { ProductSchema } from "../prisma/generated/zod";
+import { ProductSchema, CreateProductSchema } from "../modules/products/schema";
 import { ResponseErrorSchema } from "../modules/common/schema";
 
 import { prisma } from "../lib/prisma";
@@ -79,6 +79,61 @@ productsRoute.openapi(
     } catch (error) {
       console.error(error);
       return c.json({ message: "Get a product by slug failed", error }, 400);
+    }
+  }
+);
+
+// POST /products
+productsRoute.openapi(
+  createRoute({
+    tags: ["products"],
+    summary: "Add new product",
+    method: "post",
+    path: "/",
+    request: {
+      body: {
+        description: "New product to add",
+        content: {
+          "application/json": { schema: CreateProductSchema },
+        },
+      },
+    },
+    responses: {
+      400: {
+        description: "Add new product failed",
+        content: { "application/json": { schema: ResponseErrorSchema } },
+      },
+      201: {
+        description: "New product added",
+        content: { "application/json": { schema: ProductSchema } },
+      },
+    },
+  }),
+  async (c) => {
+    const body = c.req.valid("json");
+
+    const productSlug = convertSlug(body.name);
+    const categorySlug = convertSlug(body.category);
+
+    try {
+      const product = await prisma.product.create({
+        data: {
+          name: body.name,
+          slug: productSlug,
+          price: body.price,
+          imageUrl: body.imageUrl,
+          Category: {
+            connectOrCreate: {
+              where: { slug: categorySlug },
+              create: { name: body.category, slug: categorySlug },
+            },
+          },
+        },
+      });
+      return c.json(product, 201);
+    } catch (error) {
+      console.error(error);
+      return c.json({ message: "Add new product failed", error }, 400);
     }
   }
 );
