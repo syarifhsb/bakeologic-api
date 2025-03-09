@@ -39,7 +39,8 @@ model Product {
 model ProductImage {
   id String @id @default(cuid())
 
-  url String // https://example.com/images/product.jpg
+  url     String // https://example.com/images/product.jpg
+  altText String // A butter croissant
 
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
