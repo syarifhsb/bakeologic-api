@@ -2,6 +2,7 @@ import { z } from "zod";
 import { SeedProductSchema } from "./schema";
 
 export type SeedProduct = z.infer<typeof SeedProductSchema>;
+
 export const seedDataProducts: SeedProduct[] = [
   {
     name: "Croissant",

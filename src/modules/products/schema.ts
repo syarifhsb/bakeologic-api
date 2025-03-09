@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ProductSchema as GeneratedProductSchema } from "../../prisma/generated/zod";
+import { ProductSchema as GeneratedProductSchema } from "../../../prisma/generated/zod";
 import { Prisma } from "@prisma/client";
 
 export const PriceSchema = z
@@ -17,8 +17,9 @@ export const CreateProductSchema = ProductSchema.omit({
   createdAt: true,
   updatedAt: true,
 }).extend({
-  category: z.string(),
   price: z.number().refine((value) => value >= 0.01),
+  images: z.array(z.object({ url: z.string() })),
+  category: z.string(),
 });
 
 export const SeedProductSchema = z.object({

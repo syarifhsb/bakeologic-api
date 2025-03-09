@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { CategorySchema } from "../prisma/generated/zod";
+import { CategorySchema } from "../../prisma/generated/zod";
 import { ResponseErrorSchema } from "../modules/common/schema";
 
 import { prisma } from "../lib/prisma";

@@ -1,7 +1,8 @@
 import { apiReference } from "@scalar/hono-api-reference";
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { productsRoute } from "../routes/products";
-import { categoriesRoute } from "../routes/categories";
+
+import { productsRoute } from "./routes/products";
+import { categoriesRoute } from "./routes/categories";
 
 const app = new OpenAPIHono();
 
