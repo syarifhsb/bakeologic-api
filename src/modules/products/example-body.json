@@ -1,0 +1,10 @@
+{
+  "name": "",
+  "price": 0,
+  "images": [
+    { "url": "", "altText": "" },
+    { "url": "", "altText": "" },
+    { "url": "", "altText": "" }
+  ],
+  "category": ""
+}
