@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ProductSchema as GeneratedProductSchema } from "../../../prisma/generated/zod";
+import { CreateProductImageSchema, ProductImageSchema } from "../image/schema";
 import { Prisma } from "@prisma/client";
 
 export const PriceSchema = z
@@ -18,7 +19,7 @@ export const CreateProductSchema = ProductSchema.omit({
   updatedAt: true,
 }).extend({
   price: z.number().refine((value) => value >= 0.01),
-  images: z.array(z.object({ url: z.string() })),
+  images: z.array(CreateProductImageSchema),
   category: z.string(),
 });
 
@@ -26,6 +27,6 @@ export const SeedProductSchema = z.object({
   name: z.string(),
   slug: z.string(),
   price: z.number().refine((value) => value >= 0.01),
-  images: z.array(z.object({ url: z.string(), altText: z.string() })),
+  images: z.array(ProductImageSchema),
   category: z.string(),
 });

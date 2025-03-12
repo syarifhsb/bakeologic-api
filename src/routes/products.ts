@@ -121,13 +121,15 @@ productsRoute.openapi(
           name: body.name,
           slug: productSlug,
           price: body.price,
-          // TODO
-          // images: {
-          //   create: body.images.map((image) => ({ url: image })),
-          // }
-          // images: {
-          //     url: string;
-          // }[];
+          images: {
+            connectOrCreate: body.images.map((image) => ({
+              where: { url: image.url },
+              create: {
+                url: image.url,
+                altText: image.altText,
+              },
+            })),
+          },
           category: {
             connectOrCreate: {
               where: { slug: categorySlug },
