@@ -8,6 +8,7 @@ export const PriceSchema = z
   .refine((value) => value.gte("0.01"));
 
 export const ProductSchema = GeneratedProductSchema.extend({
+  name: z.string().nonempty({ message: "Name is required" }),
   price: PriceSchema,
 });
 

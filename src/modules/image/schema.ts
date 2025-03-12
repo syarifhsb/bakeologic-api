@@ -11,4 +11,6 @@ export const CreateProductImageSchema = ProductImageSchema.omit({
   productId: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  altText: z.string().nonempty({ message: "Alt text is required" }),
 });
