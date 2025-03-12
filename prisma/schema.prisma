@@ -29,8 +29,8 @@ model Product {
 
   images ProductImage[]
 
-  category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId String?
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -39,7 +39,7 @@ model Product {
 model ProductImage {
   id String @id @default(cuid())
 
-  url     String // https://example.com/images/product.jpg
+  url     String @unique // https://example.com/images/product.jpg
   altText String // A butter croissant
 
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)

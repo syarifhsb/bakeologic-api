@@ -26,6 +26,6 @@ export const SeedProductSchema = z.object({
   name: z.string(),
   slug: z.string(),
   price: z.number().refine((value) => value >= 0.01),
-  imageUrl: z.string(),
+  images: z.array(z.object({ url: z.string(), altText: z.string() })),
   category: z.string(),
 });
