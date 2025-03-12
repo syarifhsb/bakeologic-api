@@ -1,6 +1,6 @@
 services:
   backend:
-    image: chez-syarif-backend
+    image: bakeologic-backend
     build:
       context: .
     ports:

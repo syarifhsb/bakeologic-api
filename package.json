@@ -1,5 +1,5 @@
 {
-  "name": "chez-syarif-api",
+  "name": "bakeologic-api",
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "build": "bun install && bun db:migrate:deploy && bun db:gen:prod",

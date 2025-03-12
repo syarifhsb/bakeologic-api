@@ -12,7 +12,7 @@ app
   .route("/categories", categoriesRoute)
   .doc("/openapi.json", {
     openapi: "3.1.1",
-    info: { title: "Chez Syarif API", version: "1.0.0" },
+    info: { title: "Bakeologic API", version: "1.0.0" },
   })
   .get("/", apiReference({ spec: { url: "/openapi.json" } }));
 

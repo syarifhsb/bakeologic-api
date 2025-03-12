@@ -1,8 +1,8 @@
-# Chez Syarif Backend
+# Bakeologic API
 
 ## REST API Specification
 
-- Production: `https://chez-syarif-api.syarifhasibuan.com/`
+- Production: `https://bakeologic-api.syarifhasibuan.com/`
 - Local: `http://localhost:3000/`
 
 Products:
@@ -11,6 +11,7 @@ Products:
 | ------ | -------- | --------------------- | -------------- |
 | GET    | `/`      | Get all products      | 200: `[]`      |
 | GET    | `/:slug` | Get a product by slug | 200: `{}`, 404 |
+| POST   | `/`      | Create a product      | 201: `{}`      |
 
 Categories:
 
