@@ -17,11 +17,7 @@ productsRoute.openapi(
     responses: {
       200: {
         description: "Successful operation",
-        content: {
-          "application/json": {
-            schema: z.array(ProductSchema),
-          },
-        },
+        content: { "application/json": { schema: z.array(ProductSchema) } },
       },
       400: {
         description: "Get all products failed",
@@ -31,7 +27,11 @@ productsRoute.openapi(
   }),
   async (c) => {
     try {
-      const products = await prisma.product.findMany();
+      const products = await prisma.product.findMany({
+        include: {
+          category: true,
+        },
+      });
       return c.json(products, 200);
     } catch (error) {
       console.error(error);
@@ -49,19 +49,15 @@ productsRoute.openapi(
     path: "/:slug",
     request: { params: z.object({ slug: z.string() }) },
     responses: {
-      404: { description: "Product not found" },
+      200: {
+        description: "Successful operation",
+        content: { "application/json": { schema: ProductSchema } },
+      },
       400: {
         description: "Get a product by slug failed",
         content: { "application/json": { schema: ResponseErrorSchema } },
       },
-      200: {
-        description: "Successful operation",
-        content: {
-          "application/json": {
-            schema: ProductSchema,
-          },
-        },
-      },
+      404: { description: "Product not found" },
     },
   }),
   async (c) => {
@@ -70,6 +66,9 @@ productsRoute.openapi(
 
       const product = await prisma.product.findUnique({
         where: { slug },
+        include: {
+          category: true,
+        },
       });
 
       if (!product) {
@@ -93,19 +92,17 @@ productsRoute.openapi(
     request: {
       body: {
         description: "New product to add",
-        content: {
-          "application/json": { schema: CreateProductSchema },
-        },
+        content: { "application/json": { schema: CreateProductSchema } },
       },
     },
     responses: {
-      400: {
-        description: "Add new product failed",
-        content: { "application/json": { schema: ResponseErrorSchema } },
-      },
       201: {
         description: "New product added",
         content: { "application/json": { schema: ProductSchema } },
+      },
+      400: {
+        description: "Add new product failed",
+        content: { "application/json": { schema: ResponseErrorSchema } },
       },
     },
   }),
@@ -121,15 +118,13 @@ productsRoute.openapi(
           images: {
             connectOrCreate: body.images.map((image) => ({
               where: { url: image.url },
-              create: {
-                url: image.url,
-                altText: image.altText,
-              },
+              create: { url: image.url, altText: image.altText },
             })),
           },
-          category: {
-            connect: { slug: body.categorySlug },
-          },
+          category: { connect: { slug: body.categorySlug } },
+        },
+        include: {
+          category: true,
         },
       });
       return c.json(product, 201);
