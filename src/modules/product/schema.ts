@@ -24,7 +24,7 @@ export const CreateProductSchema = ProductSchema.omit({
 }).extend({
   price: z.number().refine((value) => value >= 0.01),
   images: z.array(CreateProductImageSchema),
-  category: z.string(),
+  categorySlug: z.string(),
 });
 
 export const SeedProductSchema = z.object({
@@ -32,5 +32,5 @@ export const SeedProductSchema = z.object({
   slug: z.string(),
   price: z.number().refine((value) => value >= 0.01),
   images: z.array(SeedProductImageSchema),
-  category: z.string(),
+  categorySlug: z.string(),
 });

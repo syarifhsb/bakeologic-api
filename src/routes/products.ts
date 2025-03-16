@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { ProductSchema, CreateProductSchema } from "../modules/products/schema";
+import { ProductSchema, CreateProductSchema } from "../modules/product/schema";
 import { ResponseErrorSchema } from "../modules/common/schema";
 
 import { prisma } from "../lib/prisma";
@@ -112,14 +112,11 @@ productsRoute.openapi(
   async (c) => {
     const body = c.req.valid("json");
 
-    const productSlug = convertSlug(body.name);
-    const categorySlug = convertSlug(body.category);
-
     try {
       const product = await prisma.product.create({
         data: {
           name: body.name,
-          slug: productSlug,
+          slug: convertSlug(body.name),
           price: body.price,
           images: {
             connectOrCreate: body.images.map((image) => ({
@@ -131,10 +128,7 @@ productsRoute.openapi(
             })),
           },
           category: {
-            connectOrCreate: {
-              where: { slug: categorySlug },
-              create: { name: body.category, slug: categorySlug },
-            },
+            connect: { slug: body.categorySlug },
           },
         },
       });
