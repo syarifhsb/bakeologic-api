@@ -14,3 +14,10 @@ export const CreateProductImageSchema = ProductImageSchema.omit({
 }).extend({
   altText: z.string().nonempty({ message: "Alt text is required" }),
 });
+
+export const SeedProductImageSchema = ProductImageSchema.omit({
+  id: true,
+  productId: true,
+  createdAt: true,
+  updatedAt: true,
+});
