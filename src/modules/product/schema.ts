@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   ProductSchema as GeneratedProductSchema,
   CategorySchema as GeneratedCategorySchema,
+  ProductImageSchema as GeneratedProductImageSchema,
 } from "../../../prisma/generated/zod";
 import {
   CreateProductImageSchema,
@@ -13,6 +14,7 @@ export const ProductSchema = GeneratedProductSchema.extend({
   name: z.string().nonempty({ message: "Name is required" }),
   price: PriceSchema,
   category: GeneratedCategorySchema,
+  images: z.array(GeneratedProductImageSchema),
 });
 
 export const CreateProductSchema = ProductSchema.omit({
