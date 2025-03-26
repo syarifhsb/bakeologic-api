@@ -14,6 +14,11 @@ productsRoute.openapi(
     summary: "Get all products",
     method: "get",
     path: "/",
+    request: {
+      query: z.object({
+        category: z.string().optional(),
+      }),
+    },
     responses: {
       200: {
         description: "Successful operation",
@@ -27,7 +32,10 @@ productsRoute.openapi(
   }),
   async (c) => {
     try {
+      const { category } = c.req.valid("query");
+
       const products = await prisma.product.findMany({
+        where: category ? { category: { slug: category } } : undefined,
         include: {
           category: true,
           images: true,
