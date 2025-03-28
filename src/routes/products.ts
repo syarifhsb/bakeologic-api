@@ -77,6 +77,7 @@ productsRoute.openapi(
         where: { slug },
         include: {
           category: true,
+          images: true,
         },
       });
 
