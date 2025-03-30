@@ -13,7 +13,7 @@ export const seedDataProducts: SeedProduct[] = [
     featured: true,
     images: [
       {
-        url: "https://media.istockphoto.com/id/1494437052/fr/photo/croissant-et-pain-au-chocolat-sur-planche-de-bois.jpg?s=612x612&w=0&k=20&c=n_WFRLWhoaodKtlPoNYuXyTjKZCgz8Y5vGYwyt2zltU=",
+        url: "https://ucarecdn.com/702dc96c-5b05-45fd-878e-d6914f677929/-/preview/612x408/",
         altText: "Butter Croissant",
       },
     ],
@@ -25,7 +25,7 @@ export const seedDataProducts: SeedProduct[] = [
     categorySlug: "pastries",
     images: [
       {
-        url: "https://media.istockphoto.com/id/1151266653/fr/photo/flan.jpg?s=612x612&w=0&k=20&c=z6-2yBkykk6GGHU5Ql_I8uxnfYcWnjXavzlX3M9oUso=",
+        url: "https://ucarecdn.com/21cd6c76-7f7c-4b09-9346-76be1c7d0aca/-/preview/612x408/",
         altText: "Flan Nature",
       },
     ],
@@ -39,19 +39,19 @@ export const seedDataProducts: SeedProduct[] = [
     featured: true,
     images: [
       {
-        url: "https://media.istockphoto.com/id/672982342/fr/photo/three-pain-au-chocolat.jpg?s=612x612&w=0&k=20&c=39H5GMmoPsIn5BeooqFGovtexnAyC2ro1BBhGseOOO8=",
+        url: "https://ucarecdn.com/fa94e535-9a0f-4248-8948-455ac571a9fc/-/preview/612x408/",
         altText: "Pain au Chocolat",
       },
     ],
   },
   {
-    slug: "cafe-au-lait",
-    name: "Café au Lait",
+    slug: "bakeologics-cappuccino",
+    name: "Bakeologics Cappuccino",
     price: 10,
     categorySlug: "beverages",
     images: [
       {
-        url: "https://media.istockphoto.com/id/505168330/fr/photo/caf%C3%A9-tasse-de-caf%C3%A9-avec-les-grains-de-caf%C3%A9-et-de-b%C3%A2tons-de-cannelle.jpg?s=612x612&w=0&k=20&c=Tqy_hbEGlgzWJxHFn0H_fuvvvzHAwLgqHN350dxttT0=",
+        url: "https://ucarecdn.com/f1ae429c-3efc-464c-abcf-ab6b59a2c0e4/-/preview/612x408/",
         altText: "Café au Lait",
       },
     ],
@@ -64,19 +64,19 @@ export const seedDataProducts: SeedProduct[] = [
     featured: true,
     images: [
       {
-        url: "https://media.istockphoto.com/id/166578145/fr/photo/baguettes-de-pain.jpg?s=612x612&w=0&k=20&c=F2_xC144R7CZ8pl-3BYmCOyzK21rSrnXlOCElCdf8j0=",
+        url: "https://ucarecdn.com/70fb616c-88e2-4f1c-9436-e36371a8ab18/-/preview/612x408/",
         altText: "Baguette",
       },
     ],
   },
   {
-    slug: "sandwich-poulet-mayo",
-    name: "Sandwich Poulet Mayo",
+    slug: "chicken-sandwich",
+    name: "Chicken Sandwich",
     price: 10,
     categorySlug: "sandwiches",
     images: [
       {
-        url: "https://media.istockphoto.com/id/535466213/fr/photo/sandwich.jpg?s=612x612&w=0&k=20&c=6prAdceabsf4kCuRJBngJUKYRoRdpXKu4Z81KY6YfOk=",
+        url: "https://ucarecdn.com/94f7b6dd-934d-4d40-996e-b8f9984f8dda/-/preview/612x408/",
         altText: "Chicken Sandwich",
       },
     ],
