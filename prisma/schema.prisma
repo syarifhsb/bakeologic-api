@@ -27,6 +27,8 @@ model Product {
 
   price Decimal // EUR = €1.5
 
+  stockQuantity Int @default(0)
+
   images ProductImage[]
 
   featured Boolean? @default(false)
