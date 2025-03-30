@@ -8,7 +8,7 @@ export const seedDataProducts: SeedProduct[] = [
   {
     slug: "butter-croissant",
     name: "Butter Croissant",
-    price: 10,
+    price: 2.5,
     categorySlug: "pastries",
     featured: true,
     images: [
@@ -21,7 +21,7 @@ export const seedDataProducts: SeedProduct[] = [
   {
     slug: "flan-nature",
     name: "Flan Nature",
-    price: 10,
+    price: 3.25,
     categorySlug: "pastries",
     images: [
       {
@@ -34,7 +34,7 @@ export const seedDataProducts: SeedProduct[] = [
   {
     slug: "pain-au-chocolat",
     name: "Pain au Chocolat",
-    price: 10,
+    price: 2.75,
     categorySlug: "pastries",
     featured: true,
     images: [
@@ -47,7 +47,7 @@ export const seedDataProducts: SeedProduct[] = [
   {
     slug: "bakeologics-cappuccino",
     name: "Bakeologics Cappuccino",
-    price: 10,
+    price: 4.5,
     categorySlug: "beverages",
     images: [
       {
@@ -59,7 +59,7 @@ export const seedDataProducts: SeedProduct[] = [
   {
     slug: "french-baguette",
     name: "French Baguette",
-    price: 10,
+    price: 2.25,
     categorySlug: "breads",
     featured: true,
     images: [
@@ -72,7 +72,7 @@ export const seedDataProducts: SeedProduct[] = [
   {
     slug: "chicken-sandwich",
     name: "Chicken Sandwich",
-    price: 10,
+    price: 8.95,
     categorySlug: "sandwiches",
     images: [
       {
