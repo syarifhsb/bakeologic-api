@@ -20,6 +20,7 @@ export const ProductSchema = GeneratedProductSchema.extend({
 export const CreateProductSchema = ProductSchema.omit({
   id: true,
   slug: true,
+  category: true,
   categoryId: true,
   createdAt: true,
   updatedAt: true,

@@ -119,12 +119,13 @@ productsRoute.openapi(
   async (c) => {
     const body = c.req.valid("json");
 
+    const { categorySlug, ...productData } = body;
+
     try {
       const product = await prisma.product.create({
         data: {
-          name: body.name,
+          ...productData,
           slug: convertSlug(body.name),
-          price: body.price,
           images: {
             connectOrCreate: body.images.map((image) => ({
               where: { url: image.url },

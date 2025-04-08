@@ -25,7 +25,8 @@ model Product {
   slug String @unique // butter-croissant
   name String @unique // Butter Croissant
 
-  price Decimal // EUR = €1.5
+  description String
+  price       Decimal // EUR = €1.5
 
   stockQuantity Int @default(0)
 
