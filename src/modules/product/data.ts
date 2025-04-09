@@ -99,4 +99,18 @@ export const seedDataProducts: SeedProduct[] = [
       },
     ],
   },
+  {
+    slug: "hot-chocolate",
+    name: "Hot Chocolate",
+    description: "",
+    price: 4.5,
+    categorySlug: "beverages",
+    stockQuantity: 15,
+    images: [
+      {
+        url: "https://media.istockphoto.com/id/524265513/photo/homemade-peppermint-hot-chocolate.jpg?b=1&s=612x612&w=0&k=20&c=leZdSMPfIaN0OXHhrF2_exONkk8oscCEk4hc0OEmNxs=",
+        altText: "Hot Chocolate",
+      },
+    ],
+  },
 ];

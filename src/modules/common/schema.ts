@@ -10,4 +10,4 @@ export const PriceSchema = z
   .instanceof(Prisma.Decimal)
   .refine((value) => value.gte("0.01"));
 
-export const SeedPriceSchema = z.number().refine((value) => value >= 0.01);
+export const UpsertPriceSchema = z.number().refine((value) => value >= 0.01);

@@ -1,5 +1,9 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { ProductSchema, CreateProductSchema } from "../modules/product/schema";
+import {
+  ProductSchema,
+  CreateProductSchema,
+  UpdateProductSchema,
+} from "../modules/product/schema";
 import { ResponseErrorSchema } from "../modules/common/schema";
 
 import { prisma } from "../lib/prisma";
@@ -7,10 +11,12 @@ import { convertSlug } from "../lib/slug";
 
 export const productsRoute = new OpenAPIHono();
 
+const tags = ["products"];
+
 // GET /products
 productsRoute.openapi(
   createRoute({
-    tags: ["products"],
+    tags,
     summary: "Get all products",
     method: "get",
     path: "/",
@@ -52,7 +58,7 @@ productsRoute.openapi(
 // GET /products/:slug
 productsRoute.openapi(
   createRoute({
-    tags: ["products"],
+    tags,
     summary: "Get a product by slug",
     method: "get",
     path: "/:slug",
@@ -95,7 +101,7 @@ productsRoute.openapi(
 // POST /products
 productsRoute.openapi(
   createRoute({
-    tags: ["products"],
+    tags,
     summary: "Add new product",
     method: "post",
     path: "/",
@@ -143,6 +149,107 @@ productsRoute.openapi(
     } catch (error) {
       console.error(error);
       return c.json({ message: "Add new product failed", error }, 400);
+    }
+  }
+);
+
+// PATCH /products/:slug
+productsRoute.openapi(
+  createRoute({
+    tags,
+    summary: "Update a product by slug",
+    method: "patch",
+    path: "/:slug",
+    request: {
+      params: z.object({ slug: z.string() }),
+      body: {
+        description: "Product to update",
+        content: { "application/json": { schema: UpdateProductSchema } },
+      },
+    },
+    responses: {
+      200: {
+        description: "Product updated",
+        content: { "application/json": { schema: ProductSchema } },
+      },
+      400: {
+        description: "Update a product failed",
+        content: { "application/json": { schema: ResponseErrorSchema } },
+      },
+      404: { description: "Product not found" },
+    },
+  }),
+  async (c) => {
+    const body = c.req.valid("json");
+
+    const { slug } = c.req.valid("param");
+
+    const { categorySlug, images, ...productData } = body;
+
+    try {
+      const product = await prisma.product.update({
+        where: { slug },
+        data: {
+          ...productData,
+          images: {
+            connectOrCreate: images
+              ? images.map((image) => ({
+                  where: { url: image.url },
+                  create: { url: image.url, altText: image.altText },
+                }))
+              : undefined,
+          },
+          category: {
+            connect: categorySlug ? { slug: categorySlug } : undefined,
+          },
+        },
+        include: {
+          category: true,
+          images: true,
+        },
+      });
+      return c.json(product, 200);
+    } catch (error) {
+      console.error(error);
+      return c.json({ message: "Update a product failed", error }, 400);
+    }
+  }
+);
+
+// DELETE /products/:slug
+productsRoute.openapi(
+  createRoute({
+    tags,
+    summary: "Delete a product by slug",
+    method: "delete",
+    path: "/:slug",
+    request: { params: z.object({ slug: z.string() }) },
+    responses: {
+      200: {
+        description: "Product deleted",
+        content: { "application/json": { schema: ProductSchema } },
+      },
+      400: {
+        description: "Delete a product failed",
+        content: { "application/json": { schema: ResponseErrorSchema } },
+      },
+    },
+  }),
+  async (c) => {
+    const { slug } = c.req.valid("param");
+
+    try {
+      const product = await prisma.product.delete({
+        where: { slug },
+        include: {
+          category: true,
+          images: true,
+        },
+      });
+      return c.json(product, 200);
+    } catch (error) {
+      console.error(error);
+      return c.json({ message: "Delete a product failed", error }, 400);
     }
   }
 );
