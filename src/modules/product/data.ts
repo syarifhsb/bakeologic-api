@@ -57,7 +57,7 @@ export const seedDataProducts: SeedProduct[] = [
     slug: "bakeologics-cappuccino",
     name: "Bakeologic's Cappuccino",
     description:
-      "levate your coffee experience with Bakeologic’s Cappuccino — a rich, aromatic espresso layered with velvety steamed milk and crowned with a cloud of frothy foam. Each cup delivers a perfect balance of bold flavor and creamy texture, making it a comforting indulgence from the first sip to the last. Perfectly crafted to warm your soul and energize your day.",
+      "Elevate your coffee experience with Bakeologic’s Cappuccino — a rich, aromatic espresso layered with velvety steamed milk and crowned with a cloud of frothy foam. Each cup delivers a perfect balance of bold flavor and creamy texture, making it a comforting indulgence from the first sip to the last. Perfectly crafted to warm your soul and energize your day.",
     price: 4.5,
     categorySlug: "beverages",
     stockQuantity: 15,

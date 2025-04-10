@@ -23,6 +23,7 @@ productsRoute.openapi(
     request: {
       query: z.object({
         category: z.string().optional(),
+        q: z.string().nonempty().optional(),
       }),
     },
     responses: {
@@ -38,10 +39,20 @@ productsRoute.openapi(
   }),
   async (c) => {
     try {
-      const { category } = c.req.valid("query");
+      const { category, q } = c.req.valid("query");
 
       const products = await prisma.product.findMany({
-        where: category ? { category: { slug: category } } : undefined,
+        where:
+          q || category
+            ? {
+                OR: [
+                  { category: { slug: category } },
+                  { name: { contains: q, mode: "insensitive" } },
+                  { slug: { contains: q, mode: "insensitive" } },
+                  { description: { contains: q, mode: "insensitive" } },
+                ],
+              }
+            : {},
         include: {
           category: true,
           images: true,
