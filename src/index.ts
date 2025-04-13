@@ -4,6 +4,7 @@ import { cors } from "hono/cors";
 
 import { productsRoute } from "./routes/products";
 import { categoriesRoute } from "./routes/categories";
+import { usersRoute } from "./routes/users";
 
 const app = new OpenAPIHono();
 
@@ -13,6 +14,7 @@ app
   .basePath("/")
   .route("/products", productsRoute)
   .route("/categories", categoriesRoute)
+  .route("/users", usersRoute)
   .doc("/openapi.json", {
     openapi: "3.1.1",
     info: { title: "Bakeologic API", version: "1.0.0" },

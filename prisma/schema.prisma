@@ -19,6 +19,37 @@ generator dbml {
   provider = "prisma-dbml-generator"
 }
 
+model User {
+  id String @id @default(ulid())
+
+  username    String @unique // syarifhsb
+  email       String @unique // syarifhsb@example.com
+  phoneNumber String // +33123456789
+
+  firstName String // Syarif
+  lastName  String // Hasibuan
+  avatarUrl String? @default("https://api.dicebear.com/9.x/open-peeps/svg?seed=unknown")
+
+  password Password?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Password {
+  id String @id @default(ulid())
+
+  hash String
+
+  user   User   @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId String @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// model Address
+
 model Product {
   id String @id @default(ulid())
 
