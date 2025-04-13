@@ -9,6 +9,7 @@ import {
 } from "../modules/auth/schema";
 import { hashPassword, verifyPassword } from "../lib/password";
 import { signToken, verifyToken } from "../lib/token";
+import { checkAuthorized } from "../modules/auth/middleware";
 
 export const authRoute = new OpenAPIHono();
 
@@ -117,10 +118,43 @@ authRoute.openapi(
       const { password: _, ...userWithoutPassword } = user;
 
       const token = await signToken(user.id);
+      if (!token) {
+        return c.json({ message: "Failed to login" }, 400);
+      }
 
       c.header("Token", token);
-
       return c.json({ user: userWithoutPassword, token }, 200);
+    } catch (error) {
+      console.error(error);
+      return c.json({ message: "Failed to register new user", error }, 500);
+    }
+  }
+);
+
+// GET /auth/me
+authRoute.openapi(
+  createRoute({
+    tags,
+    summary: "Check authenticated user",
+    method: "post",
+    path: "/me",
+    security: [{ bearerAuth: [] }], // TODO: Improve to be required on API Docs
+    middleware: checkAuthorized,
+    responses: {
+      200: {
+        description: "Successfully check authenticated user",
+        content: { "application/json": { schema: PublicUserSchema } },
+      },
+      500: {
+        description: "Failed to check authenticated user",
+        content: { "application/json": { schema: ResponseErrorSchema } },
+      },
+    },
+  }),
+  async (c) => {
+    try {
+      const user = c.get("user");
+      return c.json(user, 200);
     } catch (error) {
       console.error(error);
       return c.json({ message: "Failed to register new user", error }, 500);
