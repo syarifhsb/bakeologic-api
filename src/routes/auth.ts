@@ -8,6 +8,7 @@ import {
   ResponseLoginSchema,
 } from "../modules/auth/schema";
 import { hashPassword, verifyPassword } from "../lib/password";
+import { signToken, verifyToken } from "../lib/token";
 
 export const authRoute = new OpenAPIHono();
 
@@ -75,7 +76,9 @@ authRoute.openapi(
     responses: {
       200: {
         description: "Successfully registered new user",
-        content: { "application/json": { schema: ResponseLoginSchema } },
+        content: {
+          "application/json": { schema: ResponseLoginSchema },
+        },
       },
       400: {
         description: "Failed to register new user",
@@ -106,20 +109,18 @@ authRoute.openapi(
       const hash = user.password?.hash;
       if (!hash) return c.json({ message: "User has no password" }, 400);
 
-      const isMatch = await verifyPassword(hash, password);
-      if (!isMatch) {
+      const isVerified = await verifyPassword(hash, password);
+      if (!isVerified) {
         return c.json({ message: "Sorry, password was incorrect." }, 400);
       }
 
       const { password: _, ...userWithoutPassword } = user;
 
-      return c.json(
-        {
-          user: userWithoutPassword,
-          token: "abc",
-        },
-        200
-      );
+      const token = await signToken(user.id);
+
+      c.header("Token", token);
+
+      return c.json({ user: userWithoutPassword, token }, 200);
     } catch (error) {
       console.error(error);
       return c.json({ message: "Failed to register new user", error }, 500);

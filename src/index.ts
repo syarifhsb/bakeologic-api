@@ -6,6 +6,7 @@ import { productsRoute } from "./routes/products";
 import { categoriesRoute } from "./routes/categories";
 import { usersRoute } from "./routes/users";
 import { authRoute } from "./routes/auth";
+import { ENV } from "./env";
 
 const app = new OpenAPIHono();
 
@@ -22,5 +23,7 @@ app
     info: { title: "Bakeologic API", version: "1.0.0" },
   })
   .get("/", apiReference({ spec: { url: "/openapi.json" } }));
+
+console.info(`Server is running on port :${ENV.PORT}`);
 
 export default app;
