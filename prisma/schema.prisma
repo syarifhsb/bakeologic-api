@@ -24,13 +24,15 @@ model User {
 
   username    String @unique // syarifhsb
   email       String @unique // syarifhsb@example.com
-  phoneNumber String // +33123456789
+  phoneNumber String @unique // +33123456789
 
   firstName String // Syarif
   lastName  String // Hasibuan
   avatarUrl String? @default("https://api.dicebear.com/9.x/open-peeps/svg?seed=unknown")
 
   password Password?
+
+  // products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -67,6 +69,9 @@ model Product {
 
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId String
+
+  // user      User?    @relation(fields: [userId], references: [id])
+  // userId    String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
