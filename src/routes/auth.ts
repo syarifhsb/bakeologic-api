@@ -138,6 +138,7 @@ authRoute.openapi(
     summary: "Check authenticated user",
     method: "post",
     path: "/me",
+    // Authorization: Bearer <token>
     security: [{ bearerAuth: [] }], // TODO: Improve to be required on API Docs
     middleware: checkAuthorized,
     responses: {
@@ -162,33 +163,34 @@ authRoute.openapi(
   }
 );
 
-// DELETE /auth/users
-// authRoute.openapi(
-//   createRoute({
-//     tags,
-//     summary: "Delete all users",
-//     method: "delete",
-//     path: "/users",
-//     responses: {
-//       200: {
-//         description: "Successfully deleted all users",
-//         content: {
-//           "application/json": { schema: z.object({ message: z.string() }) },
-//         },
-//       },
-//       500: {
-//         description: "Failed to delete all users",
-//         content: { "application/json": { schema: ResponseErrorSchema } },
-//       },
-//     },
-//   }),
-//   async (c) => {
-//     try {
-//       await prisma.user.deleteMany();
-//       return c.json({ message: "Successfully deleted all users" }, 200);
-//     } catch (error) {
-//       console.error(error);
-//       return c.json({ message: "Failed to delete users", error }, 500);
-//     }
-//   }
-// );
+// GET /auth/me
+authRoute.openapi(
+  createRoute({
+    tags,
+    summary: "Log out user",
+    method: "post",
+    path: "/logout",
+    security: [{ bearerAuth: [] }], // TODO: Improve to be required on API Docs
+    middleware: checkAuthorized,
+    responses: {
+      200: {
+        description: "Successfully logged out user",
+        content: { "application/json": { schema: PublicUserSchema } },
+      },
+      500: {
+        description: "Failed to log out user",
+        content: { "application/json": { schema: ResponseErrorSchema } },
+      },
+    },
+  }),
+  async (c) => {
+    try {
+      const user = c.get("user");
+      // NOTE: If there's a way to invalidate the token, do it here
+      return c.json(user, 200);
+    } catch (error) {
+      console.error(error);
+      return c.json({ message: "Failed to register new user", error }, 500);
+    }
+  }
+);
