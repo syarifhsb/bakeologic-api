@@ -1,5 +1,5 @@
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { PrivateUserSchema, PublicUserSchema } from "../modules/user/schema";
+import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
+import { PublicUserSchema } from "../modules/user/schema";
 import { ResponseErrorSchema } from "../modules/common/schema";
 import { prisma } from "../lib/prisma";
 import {
@@ -8,7 +8,7 @@ import {
   ResponseLoginSchema,
 } from "../modules/auth/schema";
 import { hashPassword, verifyPassword } from "../lib/password";
-import { signToken, verifyToken } from "../lib/token";
+import { signToken } from "../lib/token";
 import { checkAuthorized } from "../modules/auth/middleware";
 
 export const authRoute = new OpenAPIHono();
@@ -163,7 +163,7 @@ authRoute.openapi(
   }
 );
 
-// GET /auth/me
+// GET /auth/logout
 authRoute.openapi(
   createRoute({
     tags,
@@ -190,7 +190,7 @@ authRoute.openapi(
       return c.json(user, 200);
     } catch (error) {
       console.error(error);
-      return c.json({ message: "Failed to register new user", error }, 500);
+      return c.json({ message: "Failed to log out user", error }, 500);
     }
   }
 );
