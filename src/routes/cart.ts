@@ -20,7 +20,7 @@ cartRoute.openapi(
     summary: "Get authenticated user's cart",
     method: "get",
     path: "/",
-    security: [{ bearerAuth: [] }],
+    security: [{ Bearer: [] }],
     middleware: checkAuthorized,
     responses: {
       200: {
@@ -80,7 +80,7 @@ cartRoute.openapi(
     summary: "Add product to cart",
     method: "put",
     path: "/items",
-    security: [{ bearerAuth: [] }],
+    security: [{ Bearer: [] }],
     middleware: checkAuthorized,
     request: {
       body: {
@@ -182,7 +182,7 @@ cartRoute.openapi(
     summary: "Remove product from cart",
     method: "delete",
     path: "/items/:id",
-    security: [{ bearerAuth: [] }],
+    security: [{ Bearer: [] }],
     middleware: checkAuthorized,
     request: { params: z.object({ id: z.string() }) },
     responses: {
@@ -231,7 +231,7 @@ cartRoute.openapi(
     summary: "Update product quantity in cart",
     method: "patch",
     path: "/items/:id",
-    security: [{ bearerAuth: [] }],
+    security: [{ Bearer: [] }],
     middleware: checkAuthorized,
     request: {
       params: z.object({ id: z.string() }),

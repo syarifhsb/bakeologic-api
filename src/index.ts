@@ -13,17 +13,25 @@ const app = new OpenAPIHono();
 app.use(cors());
 
 app
-  .basePath("/")
   .route("/products", productsRoute)
   .route("/categories", categoriesRoute)
   .route("/users", usersRoute)
   .route("/auth", authRoute)
-  .route("/cart", cartRoute)
+  .route("/cart", cartRoute);
+
+app
   .doc("/openapi.json", {
     openapi: "3.1.1",
     info: { title: "Bakeologic API", version: "1.0.0" },
   })
-  .get("/", apiReference({ spec: { url: "/openapi.json" } }));
+  .openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
+    type: "http",
+    scheme: "bearer",
+    in: "header",
+    // Authorization: Bearer <token>
+  });
+
+app.get("/", apiReference({ spec: { url: "/openapi.json" } }));
 
 console.info(`Server is running on port :${ENV.PORT}`);
 

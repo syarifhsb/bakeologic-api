@@ -138,8 +138,7 @@ authRoute.openapi(
     summary: "Check authenticated user",
     method: "post",
     path: "/me",
-    // Authorization: Bearer <token>
-    security: [{ bearerAuth: [] }], // TODO: Improve to be required on API Docs
+    security: [{ Bearer: [] }],
     middleware: checkAuthorized,
     responses: {
       200: {
@@ -170,7 +169,7 @@ authRoute.openapi(
     summary: "Log out user",
     method: "post",
     path: "/logout",
-    security: [{ bearerAuth: [] }], // TODO: Improve to be required on API Docs
+    security: [{ Bearer: [] }],
     middleware: checkAuthorized,
     responses: {
       200: {
