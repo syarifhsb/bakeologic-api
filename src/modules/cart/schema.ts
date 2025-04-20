@@ -18,5 +18,9 @@ export const RequestPostCartItemsSchema = z.object({
   quantity: z.number(), // Allow negative quantity for decrease items
 });
 
+export const RequestPatchCartItemsQuantitySchema = z.object({
+  quantity: z.number().min(1), // Allow negative quantity for decrease items
+});
+
 export type PrivateCart = z.infer<typeof PrivateCartSchema>;
 export type PrivateCartItem = z.infer<typeof PrivateCartItemSchema>;

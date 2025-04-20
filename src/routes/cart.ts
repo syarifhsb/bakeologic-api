@@ -4,6 +4,7 @@ import { checkAuthorized } from "../modules/auth/middleware";
 import {
   PrivateCartItemSchema,
   PrivateCartSchema,
+  RequestPatchCartItemsQuantitySchema,
   RequestPostCartItemsSchema,
 } from "../modules/cart/schema";
 import { ResponseErrorSchema } from "../modules/common/schema";
@@ -234,7 +235,9 @@ cartRoute.openapi(
       params: z.object({ id: z.string() }),
       body: {
         description: "Product quantity to update",
-        content: { "application/json": { schema: RequestPostCartItemsSchema } },
+        content: {
+          "application/json": { schema: RequestPatchCartItemsQuantitySchema },
+        },
       },
     },
     responses: {
