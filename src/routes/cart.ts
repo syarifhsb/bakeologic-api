@@ -1,13 +1,13 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { prisma } from "../lib/prisma";
-import { checkAuthorized } from "../modules/auth/middleware";
+import { prisma } from "~/lib/prisma";
+import { checkAuthorized } from "~/modules/auth/middleware";
 import {
   PrivateCartItemSchema,
   PrivateCartSchema,
   RequestPatchCartItemsQuantitySchema,
   RequestPostCartItemsSchema,
-} from "../modules/cart/schema";
-import { ResponseErrorSchema } from "../modules/common/schema";
+} from "~/modules/cart/schema";
+import { ResponseErrorSchema } from "~/modules/common/schema";
 
 export const cartRoute = new OpenAPIHono();
 
@@ -41,7 +41,9 @@ cartRoute.openapi(
         where: { userId: user.id },
         include: {
           items: {
-            include: { product: { include: { images: true, category: true } } },
+            include: {
+              product: { include: { images: true, category: true } },
+            },
           },
         },
       });

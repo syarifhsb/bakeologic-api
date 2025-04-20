@@ -3,12 +3,12 @@ import {
   ProductSchema as GeneratedProductSchema,
   CategorySchema as GeneratedCategorySchema,
   ProductImageSchema as GeneratedProductImageSchema,
-} from "../../../prisma/generated/zod";
+} from "@/prisma/generated/zod";
 import {
   CreateProductImageSchema,
   SeedProductImageSchema,
-} from "../image/schema";
-import { PriceSchema, UpsertPriceSchema } from "../common/schema";
+} from "~/modules/image/schema";
+import { PriceSchema, UpsertPriceSchema } from "~/modules/common/schema";
 
 export const ProductSchema = GeneratedProductSchema.extend({
   name: z.string().nonempty({ message: "Name is required" }),

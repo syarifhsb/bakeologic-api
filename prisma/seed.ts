@@ -1,8 +1,8 @@
 import { Prisma } from "@prisma/client";
 
-import { prisma } from "../src/lib/prisma";
-import { seedDataCategories } from "../src/modules/category/data";
-import { seedDataProducts } from "../src/modules/product/data";
+import { prisma } from "~/lib/prisma";
+import { seedDataCategories } from "~/modules/category/data";
+import { seedDataProducts } from "~/modules/product/data";
 
 async function seedCategories() {
   for (const seedDataCategory of seedDataCategories) {

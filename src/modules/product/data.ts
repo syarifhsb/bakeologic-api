@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { SeedProductSchema } from "../product/schema";
+import { SeedProductSchema } from "~/modules/product/schema";
 
 export type SeedProduct = z.infer<typeof SeedProductSchema>;
 

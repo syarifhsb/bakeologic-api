@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { ProductImageSchema as GeneratedProductImageSchema } from "../../../prisma/generated/zod";
+import { ProductImageSchema as GeneratedProductImageSchema } from "@/prisma/generated/zod";
 
 export const ProductImageSchema = GeneratedProductImageSchema.extend({
   url: z.string().url(),

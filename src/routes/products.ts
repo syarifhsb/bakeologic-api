@@ -3,11 +3,11 @@ import {
   ProductSchema,
   CreateProductSchema,
   UpdateProductSchema,
-} from "../modules/product/schema";
-import { ResponseErrorSchema } from "../modules/common/schema";
+} from "~/modules/product/schema";
+import { ResponseErrorSchema } from "~/modules/common/schema";
 
-import { prisma } from "../lib/prisma";
-import { convertSlug } from "../lib/slug";
+import { prisma } from "~/lib/prisma";
+import { convertSlug } from "~/lib/slug";
 
 export const productsRoute = new OpenAPIHono();
 

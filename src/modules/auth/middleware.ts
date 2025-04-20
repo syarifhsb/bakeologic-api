@@ -1,7 +1,7 @@
 import { createMiddleware } from "hono/factory";
-import { prisma } from "../../lib/prisma";
-import { TokenPayload, verifyToken } from "../../lib/token";
-import { PublicUser } from "../user/schema";
+import { prisma } from "~/lib/prisma";
+import { TokenPayload, verifyToken } from "~/lib/token";
+import { PublicUser } from "~/modules/user/schema";
 
 type Env = {
   Variables: {

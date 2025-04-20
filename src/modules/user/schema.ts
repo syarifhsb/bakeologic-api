@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { UserSchema as GeneratedUserSchema } from "../../../prisma/generated/zod";
+import { UserSchema as GeneratedUserSchema } from "@/prisma/generated/zod";
 
 export const PrivateUserSchema = GeneratedUserSchema;
 

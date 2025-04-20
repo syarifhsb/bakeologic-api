@@ -1,5 +1,5 @@
 import { sign, verify } from "hono/jwt";
-import { ENV } from "../env";
+import { ENV } from "~/env";
 import { JWTPayload } from "hono/utils/jwt/types";
 
 export type TokenPayload = {

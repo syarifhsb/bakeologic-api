@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { UserSchema as GeneratedUserSchema } from "../../../prisma/generated/zod";
-import { PublicUserSchema } from "../user/schema";
+import { UserSchema as GeneratedUserSchema } from "@/prisma/generated/zod";
+import { PublicUserSchema } from "~/modules/user/schema";
 
 export const PasswordSchema = z
   .string()

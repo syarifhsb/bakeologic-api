@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { SeedCategorySchema } from "../category/schema";
+import { SeedCategorySchema } from "~/modules/category/schema";
 
 export type SeedCategory = z.infer<typeof SeedCategorySchema>;
 

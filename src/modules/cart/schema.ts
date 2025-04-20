@@ -2,8 +2,8 @@ import { z } from "zod";
 import {
   CartItemSchema as GeneratedCartItemSchema,
   CartSchema as GeneratedCartSchema,
-} from "../../../prisma/generated/zod";
-import { ProductSchema } from "../product/schema";
+} from "@/prisma/generated/zod";
+import { ProductSchema } from "~/modules/product/schema";
 
 export const PrivateCartItemSchema = GeneratedCartItemSchema.extend({
   product: ProductSchema,
@@ -19,7 +19,7 @@ export const RequestPostCartItemsSchema = z.object({
 });
 
 export const RequestPatchCartItemsQuantitySchema = z.object({
-  quantity: z.number().min(1), // Allow negative quantity for decrease items
+  quantity: z.number().min(1),
 });
 
 export type PrivateCart = z.infer<typeof PrivateCartSchema>;

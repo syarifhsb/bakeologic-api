@@ -1,8 +1,8 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { ResponseErrorSchema } from "../modules/common/schema";
+import { ResponseErrorSchema } from "~/modules/common/schema";
 
-import { prisma } from "../lib/prisma";
-import { CategorySchema } from "../modules/category/schema";
+import { prisma } from "~/lib/prisma";
+import { CategorySchema } from "~/modules/category/schema";
 
 export const categoriesRoute = new OpenAPIHono();
 
