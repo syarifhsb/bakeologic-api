@@ -1,13 +1,12 @@
-import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
-import { PublicUserSchema } from "../modules/user/schema";
-import { ResponseErrorSchema } from "../modules/common/schema";
+import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
+import { prisma } from "../lib/prisma";
 import { checkAuthorized } from "../modules/auth/middleware";
 import {
   PrivateCartItemSchema,
   PrivateCartSchema,
   RequestPostCartItemsSchema,
 } from "../modules/cart/schema";
-import { prisma } from "../lib/prisma";
+import { ResponseErrorSchema } from "../modules/common/schema";
 
 export const cartRoute = new OpenAPIHono();
 
@@ -40,7 +39,9 @@ cartRoute.openapi(
       const existingCart = await prisma.cart.findUnique({
         where: { userId: user.id },
         include: {
-          items: { include: { product: { include: { images: true } } } },
+          items: {
+            include: { product: { include: { images: true, category: true } } },
+          },
         },
       });
 
@@ -48,7 +49,11 @@ cartRoute.openapi(
         const newCart = await prisma.cart.create({
           data: { userId: user.id },
           include: {
-            items: { include: { product: { include: { images: true } } } },
+            items: {
+              include: {
+                product: { include: { images: true, category: true } },
+              },
+            },
           },
         });
         return c.json(newCart, 200);
@@ -65,7 +70,7 @@ cartRoute.openapi(
   }
 );
 
-// POST /cart/items
+// PUT /cart/items
 cartRoute.openapi(
   createRoute({
     tags,
@@ -163,6 +168,118 @@ cartRoute.openapi(
     } catch (error) {
       console.error(error);
       return c.json({ message: "Failed to add product to cart", error }, 500);
+    }
+  }
+);
+
+// DELETE /cart/items/:id
+cartRoute.openapi(
+  createRoute({
+    tags,
+    summary: "Remove product from cart",
+    method: "delete",
+    path: "/items/:id",
+    security: [{ bearerAuth: [] }],
+    middleware: checkAuthorized,
+    request: { params: z.object({ id: z.string() }) },
+    responses: {
+      200: {
+        description: "Successfully remove product from cart",
+        content: { "application/json": { schema: PrivateCartItemSchema } },
+      },
+      404: {
+        description:
+          "Failed to remove product from cart because cart item not found",
+      },
+      500: {
+        description: "Failed to remove product from cart",
+        content: { "application/json": { schema: ResponseErrorSchema } },
+      },
+    },
+  }),
+  async (c) => {
+    try {
+      const user = c.get("user");
+      const { id } = c.req.valid("param");
+
+      const cartItem = await prisma.cartItem.delete({
+        where: { id, cart: { userId: user.id } },
+      });
+
+      if (!cartItem) {
+        return c.json({ message: "Cart item not found" }, 404);
+      }
+
+      return c.json(cartItem, 200);
+    } catch (error) {
+      console.error(error);
+      return c.json(
+        { message: "Failed to remove product from cart", error },
+        500
+      );
+    }
+  }
+);
+
+// PATCH /cart/items/:id
+cartRoute.openapi(
+  createRoute({
+    tags,
+    summary: "Update product quantity in cart",
+    method: "patch",
+    path: "/items/:id",
+    security: [{ bearerAuth: [] }],
+    middleware: checkAuthorized,
+    request: {
+      params: z.object({ id: z.string() }),
+      body: {
+        description: "Product quantity to update",
+        content: { "application/json": { schema: RequestPostCartItemsSchema } },
+      },
+    },
+    responses: {
+      200: {
+        description: "Successfully update product quantity in cart",
+        content: { "application/json": { schema: PrivateCartItemSchema } },
+      },
+      404: {
+        description:
+          "Failed to update product quantity in cart because cart item not found",
+      },
+      500: {
+        description: "Failed to update product quantity in cart",
+        content: { "application/json": { schema: ResponseErrorSchema } },
+      },
+    },
+  }),
+  async (c) => {
+    try {
+      const user = c.get("user");
+      const { id } = c.req.valid("param");
+      const body = c.req.valid("json");
+
+      const cartItem = await prisma.cartItem.findUnique({
+        where: { id, cart: { userId: user.id } },
+      });
+
+      if (!cartItem) {
+        return c.json({ message: "Cart item not found" }, 404);
+      }
+
+      const { quantity } = body;
+
+      const updatedCartItem = await prisma.cartItem.update({
+        where: { id },
+        data: { quantity },
+        include: { product: { include: { images: true, category: true } } },
+      });
+      return c.json(updatedCartItem, 200);
+    } catch (error) {
+      console.error(error);
+      return c.json(
+        { message: "Failed to update product quantity in cart", error },
+        500
+      );
     }
   }
 );

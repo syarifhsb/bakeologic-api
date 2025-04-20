@@ -1,9 +1,7 @@
 import { createMiddleware } from "hono/factory";
-import { TokenPayload, verifyToken } from "../../lib/token";
 import { prisma } from "../../lib/prisma";
+import { TokenPayload, verifyToken } from "../../lib/token";
 import { PublicUser } from "../user/schema";
-import { jwt } from "hono/jwt";
-import { ENV } from "../../env";
 
 type Env = {
   Variables: {
@@ -22,7 +20,10 @@ export const checkAuthorized = createMiddleware<Env>(async (c, next) => {
     return c.json({ message: "Authorization header not found" }, 401);
   }
 
-  const token = authHeader.split(" ")[1];
+  const [type, token] = authHeader.split(" ");
+  if (type !== "Bearer") {
+    return c.json({ message: "Authorization type is not supported" }, 401);
+  }
   if (!token) {
     return c.json({ message: "Token not found" }, 401);
   }

@@ -14,7 +14,7 @@ export const PrivateCartSchema = GeneratedCartSchema.extend({
 });
 
 export const RequestPostCartItemsSchema = z.object({
-  productId: z.string(),
+  productId: z.string().nonempty(),
   quantity: z.number(), // Allow negative quantity for decrease items
 });
 
