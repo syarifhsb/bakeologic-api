@@ -1,6 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { apiReference } from "@scalar/hono-api-reference";
 import { cors } from "hono/cors";
+import { logger } from "hono/logger";
 import { ENV } from "./env";
 import { authRoute } from "./routes/auth";
 import { cartRoute } from "./routes/cart";
@@ -10,6 +11,7 @@ import { usersRoute } from "./routes/users";
 
 const app = new OpenAPIHono();
 
+app.use(logger());
 app.use(cors());
 
 app
