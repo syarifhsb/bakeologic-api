@@ -1,5 +1,5 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
-import { PublicUserSchema } from "~/modules/user/schema";
+import { PrivateUserSchema, PublicUserSchema } from "~/modules/user/schema";
 import { ResponseErrorSchema } from "~/modules/common/schema";
 import { prisma } from "~/lib/prisma";
 import {
@@ -143,7 +143,7 @@ authRoute.openapi(
     responses: {
       200: {
         description: "Successfully check authenticated user",
-        content: { "application/json": { schema: PublicUserSchema } },
+        content: { "application/json": { schema: PrivateUserSchema } },
       },
       500: {
         description: "Failed to check authenticated user",
