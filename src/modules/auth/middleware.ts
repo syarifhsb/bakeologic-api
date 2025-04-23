@@ -1,11 +1,11 @@
 import { createMiddleware } from "hono/factory";
 import { prisma } from "~/lib/prisma";
 import { TokenPayload, verifyToken } from "~/lib/token";
-import { PublicUser } from "~/modules/user/schema";
+import { PrivateUser } from "~/modules/user/schema";
 
 type Env = {
   Variables: {
-    user: PublicUser;
+    user: PrivateUser;
   };
 };
 
@@ -35,7 +35,6 @@ export const checkAuthorized = createMiddleware<Env>(async (c, next) => {
 
   const user = await prisma.user.findUnique({
     where: { id: payload.sub },
-    omit: { email: true, phoneNumber: true },
   });
   if (!user) {
     return c.json({ message: "User not found" }, 401);
