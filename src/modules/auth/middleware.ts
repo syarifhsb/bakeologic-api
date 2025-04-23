@@ -24,7 +24,7 @@ export const checkAuthorized = createMiddleware<Env>(async (c, next) => {
   if (type !== "Bearer") {
     return c.json({ message: "Authorization type is not supported" }, 401);
   }
-  if (!token) {
+  if (!token || token === "undefined") {
     return c.json({ message: "Token not found" }, 401);
   }
 
