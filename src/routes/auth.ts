@@ -136,7 +136,7 @@ authRoute.openapi(
   createRoute({
     tags,
     summary: "Check authenticated user",
-    method: "post",
+    method: "get",
     path: "/me",
     security: [{ Bearer: [] }],
     middleware: checkAuthorized,
