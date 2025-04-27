@@ -2,11 +2,20 @@ import { z } from "zod";
 import { UserSchema as GeneratedUserSchema } from "@/prisma/generated/zod";
 import { PublicUserSchema } from "~/modules/user/schema";
 
+export const UsernameSchema = z
+  .string()
+  .min(2, { message: "Username must be at least 2 characters long" });
+
 export const PasswordSchema = z
   .string()
   .min(8, { message: "Password must be at least 8 characters long" });
 
-export const RequestRegisterSchema = GeneratedUserSchema.pick({
+export const UserSchema = GeneratedUserSchema.extend({
+  username: UsernameSchema,
+  password: PasswordSchema,
+});
+
+export const RequestRegisterSchema = UserSchema.pick({
   username: true,
   email: true,
   phoneNumber: true,
@@ -16,13 +25,12 @@ export const RequestRegisterSchema = GeneratedUserSchema.pick({
   password: PasswordSchema,
 });
 
-export const RequestLoginSchema = GeneratedUserSchema.pick({
+export const RequestLoginSchema = UserSchema.pick({
   username: true,
-}).extend({
-  password: PasswordSchema,
+  password: true,
 });
 
-export const ResponseLoginSchema = z.object({
+export const ResponseLoginSuccessSchema = z.object({
   user: PublicUserSchema,
   token: z.string(),
 });

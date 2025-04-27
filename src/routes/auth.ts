@@ -5,7 +5,7 @@ import { prisma } from "~/lib/prisma";
 import {
   RequestLoginSchema,
   RequestRegisterSchema,
-  ResponseLoginSchema,
+  ResponseLoginSuccessSchema,
 } from "~/modules/auth/schema";
 import { hashPassword, verifyPassword } from "~/lib/password";
 import { signToken } from "~/lib/token";
@@ -78,7 +78,7 @@ authRoute.openapi(
       200: {
         description: "Successfully registered new user",
         content: {
-          "application/json": { schema: ResponseLoginSchema },
+          "application/json": { schema: ResponseLoginSuccessSchema },
         },
       },
       400: {
