@@ -5,7 +5,7 @@ import {
   PrivateCartItemSchema,
   PrivateCartSchema,
   RequestPatchCartItemsQuantitySchema,
-  RequestPostCartItemsSchema,
+  RequestPutCartItemsSchema,
 } from "~/modules/cart/schema";
 import { ResponseErrorSchema } from "~/modules/common/schema";
 
@@ -85,7 +85,7 @@ cartRoute.openapi(
     request: {
       body: {
         description: "Product and quantity",
-        content: { "application/json": { schema: RequestPostCartItemsSchema } },
+        content: { "application/json": { schema: RequestPutCartItemsSchema } },
       },
     },
     responses: {

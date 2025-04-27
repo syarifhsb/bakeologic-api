@@ -13,8 +13,13 @@ export const PrivateCartSchema = GeneratedCartSchema.extend({
   items: z.array(PrivateCartItemSchema),
 });
 
-export const RequestPostCartItemsSchema = z.object({
+export const RequestPutCartItemsSchema = z.object({
   productId: z.string().nonempty(),
+  quantity: z.number(), // Allow negative quantity for decrease items
+});
+
+export const RequestPatchCartItemSchema = z.object({
+  cartItemId: z.string().nonempty(),
   quantity: z.number(), // Allow negative quantity for decrease items
 });
 
