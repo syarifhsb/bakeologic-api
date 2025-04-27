@@ -93,7 +93,7 @@ cartRoute.openapi(
         description: "Successfully add product to cart",
         content: { "application/json": { schema: PrivateCartItemSchema } },
       },
-      404: {
+      400: {
         description: "Failed to add product to cart because cart not found",
       },
       500: {
@@ -110,9 +110,7 @@ cartRoute.openapi(
       const product = await prisma.product.findUnique({
         where: { id: body.productId },
       });
-      if (!product) {
-        return c.json({ message: "Product not found" }, 404);
-      }
+      if (!product) return c.json({ message: "Product not found" }, 400);
 
       // TODO: Refactor to middleware
       const existingCart = await prisma.cart.findUnique({
@@ -120,7 +118,7 @@ cartRoute.openapi(
         include: { items: { include: { product: true } } },
       });
       if (!existingCart) {
-        return c.json({ message: "Cart not found" }, 404);
+        return c.json({ message: "Cart not found" }, 402);
       }
 
       const existingCartItem = existingCart.items.find((item) => {
@@ -134,6 +132,8 @@ cartRoute.openapi(
 
         const isQuantityLessEqualThanStock =
           body.quantity <= product.stockQuantity;
+
+        console.log({ existingCartItem, isQuantityLessEqualThanStock });
 
         if (!isQuantityLessEqualThanStock) {
           return c.json({ message: "Quantity is greater than stock" }, 400);
