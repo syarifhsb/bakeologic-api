@@ -1,7 +1,12 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { PublicUserSchema } from "~/modules/user/schema";
+import {
+  PrivateUserSchema,
+  PrivateUserUpdateSchema,
+  PublicUserSchema,
+} from "~/modules/user/schema";
 import { ResponseErrorSchema } from "~/modules/common/schema";
 import { prisma } from "~/lib/prisma";
+import { checkAuthorized } from "~/modules/auth/middleware";
 
 export const usersRoute = new OpenAPIHono();
 
@@ -79,5 +84,47 @@ usersRoute.openapi(
 );
 
 // PATCH /users/:id
+usersRoute.openapi(
+  createRoute({
+    tags,
+    summary: "Update a user",
+    method: "patch",
+    path: "/me",
+    security: [{ Bearer: [] }],
+    middleware: checkAuthorized,
+    request: {
+      body: {
+        description: "User to update",
+        content: { "application/json": { schema: PrivateUserUpdateSchema } },
+      },
+    },
+    responses: {
+      200: {
+        description: "User successfully updated",
+        content: { "application/json": { schema: PrivateUserSchema } },
+      },
+      500: {
+        description: "Failed to update a user",
+        content: { "application/json": { schema: ResponseErrorSchema } },
+      },
+    },
+  }),
+  async (c) => {
+    try {
+      const user = c.get("user");
+      const body = c.req.valid("json");
+
+      const userUpdated = await prisma.user.update({
+        where: { id: user.id },
+        data: body,
+      });
+
+      return c.json(userUpdated, 200);
+    } catch (error) {
+      console.error(error);
+      return c.json({ message: "User update failed", error }, 500);
+    }
+  }
+);
 
 // DELETE /users/:id

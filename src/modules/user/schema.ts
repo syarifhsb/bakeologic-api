@@ -8,5 +8,11 @@ export const PublicUserSchema = GeneratedUserSchema.omit({
   phoneNumber: true,
 });
 
+export const PrivateUserUpdateSchema = PrivateUserSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export type PrivateUser = z.infer<typeof PrivateUserSchema>;
 export type PublicUser = z.infer<typeof PublicUserSchema>;
