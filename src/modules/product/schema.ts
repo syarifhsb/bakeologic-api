@@ -13,7 +13,7 @@ import { PriceSchema, UpsertPriceSchema } from "~/modules/common/schema";
 export const ProductSchema = GeneratedProductSchema.extend({
   name: z.string().nonempty({ message: "Name is required" }),
   price: PriceSchema,
-  category: GeneratedCategorySchema,
+  category: GeneratedCategorySchema.optional(),
   images: z.array(GeneratedProductImageSchema),
 });
 

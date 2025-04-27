@@ -95,6 +95,7 @@ cartRoute.openapi(
       },
       400: {
         description: "Failed to add product to cart because cart not found",
+        content: { "application/json": { schema: ResponseErrorSchema } },
       },
       500: {
         description: "Failed to add product to cart",
@@ -118,13 +119,14 @@ cartRoute.openapi(
         include: { items: { include: { product: true } } },
       });
       if (!existingCart) {
-        return c.json({ message: "Cart not found" }, 402);
+        return c.json({ message: "Cart not found" }, 400);
       }
 
       const existingCartItem = existingCart.items.find((item) => {
         return item.productId === body.productId;
       });
 
+      // IF NO CART ITEM = NEW PRODUCT TO ADD
       if (!existingCartItem) {
         if (body.quantity <= 0) {
           return c.json({ message: "Quantity cannot be less than 0" }, 400);
@@ -149,6 +151,8 @@ cartRoute.openapi(
         });
         return c.json(newCartItem, 200);
       }
+
+      // IF EXIST CART ITEM = EXISTING PRODUCT TO ADD
 
       const totalQuantity = existingCartItem.quantity + body.quantity;
       if (totalQuantity <= 0) {
@@ -276,7 +280,7 @@ cartRoute.openapi(
       const updatedCartItem = await prisma.cartItem.update({
         where: { id },
         data: { quantity },
-        include: { product: { include: { images: true, category: true } } },
+        include: { product: true },
       });
       return c.json(updatedCartItem, 200);
     } catch (error) {
