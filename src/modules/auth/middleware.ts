@@ -58,8 +58,6 @@ export const checkCart = createMiddleware<Env>(async (c, next) => {
     },
   });
 
-  console.log(`Existing cart: ${existingCart}`);
-
   if (!existingCart) {
     const newCart = await prisma.cart.create({
       data: { userId: user.id },
@@ -67,7 +65,7 @@ export const checkCart = createMiddleware<Env>(async (c, next) => {
         items: { include: { product: { include: { images: true } } } },
       },
     });
-    console.log(`New cart: ${newCart}`);
+
     c.set("cart", newCart);
     await next();
   } else {

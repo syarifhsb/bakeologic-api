@@ -110,8 +110,6 @@ cartRoute.openapi(
       const cart = c.get("cart");
       const body = c.req.valid("json");
 
-      console.log(cart);
-
       const product = await prisma.product.findUnique({
         where: { id: body.productId },
       });
@@ -129,8 +127,6 @@ cartRoute.openapi(
 
         const isQuantityLessEqualThanStock =
           body.quantity <= product.stockQuantity;
-
-        console.log({ existingCartItem, isQuantityLessEqualThanStock });
 
         if (!isQuantityLessEqualThanStock) {
           return c.json({ message: "Quantity is greater than stock" }, 400);
