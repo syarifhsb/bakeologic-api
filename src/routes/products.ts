@@ -42,6 +42,7 @@ productsRoute.openapi(
       const { category, q } = c.req.valid("query");
 
       const products = await prisma.product.findMany({
+        // BEFORE
         where:
           q || category
             ? {
@@ -53,6 +54,16 @@ productsRoute.openapi(
                 ],
               }
             : {},
+        // AFTER
+        // where: {
+        //   name: { search: "co" },
+        //   slug: { search: q },
+        //   description: { search: q },
+        //   category: {
+        //     slug: { search: category },
+        //     name: { search: category },
+        //   },
+        // },
         include: {
           category: true,
           images: true,
