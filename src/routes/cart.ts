@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { prisma } from "~/lib/prisma";
-import { checkAuthorized } from "~/modules/auth/middleware";
+import { checkAuthorized, checkCart } from "~/modules/auth/middleware";
 import {
   PrivateCartItemSchema,
   PrivateCartSchema,
@@ -8,8 +8,9 @@ import {
   RequestPutCartItemsSchema,
 } from "~/modules/cart/schema";
 import { ResponseErrorSchema } from "~/modules/common/schema";
+import { Env } from "~/modules/auth/middleware";
 
-export const cartRoute = new OpenAPIHono();
+export const cartRoute = new OpenAPIHono<Env>();
 
 const tags = ["cart"];
 
@@ -81,7 +82,7 @@ cartRoute.openapi(
     method: "put",
     path: "/items",
     security: [{ Bearer: [] }],
-    middleware: checkAuthorized,
+    middleware: [checkAuthorized, checkCart],
     request: {
       body: {
         description: "Product and quantity",
@@ -106,23 +107,17 @@ cartRoute.openapi(
   async (c) => {
     try {
       const user = c.get("user");
+      const cart = c.get("cart");
       const body = c.req.valid("json");
+
+      console.log(cart);
 
       const product = await prisma.product.findUnique({
         where: { id: body.productId },
       });
       if (!product) return c.json({ message: "Product not found" }, 400);
 
-      // TODO: Refactor to middleware
-      const existingCart = await prisma.cart.findUnique({
-        where: { userId: user.id },
-        include: { items: { include: { product: true } } },
-      });
-      if (!existingCart) {
-        return c.json({ message: "Cart not found" }, 400);
-      }
-
-      const existingCartItem = existingCart.items.find((item) => {
+      const existingCartItem = cart.items.find((item) => {
         return item.productId === body.productId;
       });
 
@@ -143,7 +138,7 @@ cartRoute.openapi(
 
         const newCartItem = await prisma.cartItem.create({
           data: {
-            cartId: existingCart.id,
+            cartId: cart.id,
             productId: body.productId,
             quantity: body.quantity,
           },

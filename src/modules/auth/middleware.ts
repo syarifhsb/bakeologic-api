@@ -2,10 +2,12 @@ import { createMiddleware } from "hono/factory";
 import { prisma } from "~/lib/prisma";
 import { TokenPayload, verifyToken } from "~/lib/token";
 import { PrivateUser } from "~/modules/user/schema";
+import { PrivateCart } from "~/modules/cart/schema";
 
-type Env = {
+export type Env = {
   Variables: {
     user: PrivateUser;
+    cart: PrivateCart;
   };
 };
 
@@ -43,4 +45,33 @@ export const checkAuthorized = createMiddleware<Env>(async (c, next) => {
   c.set("user", user);
 
   await next();
+});
+
+// Check for cart
+export const checkCart = createMiddleware<Env>(async (c, next) => {
+  const user = c.get("user");
+
+  const existingCart = await prisma.cart.findUnique({
+    where: { userId: user.id },
+    include: {
+      items: { include: { product: { include: { images: true } } } },
+    },
+  });
+
+  console.log(`Existing cart: ${existingCart}`);
+
+  if (!existingCart) {
+    const newCart = await prisma.cart.create({
+      data: { userId: user.id },
+      include: {
+        items: { include: { product: { include: { images: true } } } },
+      },
+    });
+    console.log(`New cart: ${newCart}`);
+    c.set("cart", newCart);
+    await next();
+  } else {
+    c.set("cart", existingCart);
+    await next();
+  }
 });
