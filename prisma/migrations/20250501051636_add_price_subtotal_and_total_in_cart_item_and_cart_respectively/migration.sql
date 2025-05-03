@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Cart" ADD COLUMN     "total" DECIMAL(65,30) NOT NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE "CartItem" ADD COLUMN     "subtotal" DECIMAL(65,30) NOT NULL DEFAULT 0;

@@ -4,13 +4,16 @@ import {
   CartSchema as GeneratedCartSchema,
 } from "@/prisma/generated/zod";
 import { ProductSchema } from "~/modules/product/schema";
+import { PriceSchema } from "~/modules/common/schema";
 
 export const PrivateCartItemSchema = GeneratedCartItemSchema.extend({
   product: ProductSchema,
+  totalPrice: PriceSchema,
 });
 
 export const PrivateCartSchema = GeneratedCartSchema.extend({
   items: z.array(PrivateCartItemSchema),
+  totalPrice: PriceSchema,
 });
 
 export const RequestPutCartItemsSchema = z.object({

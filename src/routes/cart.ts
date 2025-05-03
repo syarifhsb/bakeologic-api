@@ -1,6 +1,6 @@
 import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
 import { prisma } from "~/lib/prisma";
-import { checkAuthorized, checkCart } from "~/modules/auth/middleware";
+import { checkAuthorized, checkCart, Env } from "~/modules/auth/middleware";
 import {
   PrivateCartItemSchema,
   PrivateCartSchema,
@@ -8,7 +8,6 @@ import {
   RequestPutCartItemsSchema,
 } from "~/modules/cart/schema";
 import { ResponseErrorSchema } from "~/modules/common/schema";
-import { Env } from "~/modules/auth/middleware";
 
 export const cartRoute = new OpenAPIHono<Env>();
 
@@ -106,7 +105,6 @@ cartRoute.openapi(
   }),
   async (c) => {
     try {
-      const user = c.get("user");
       const cart = c.get("cart");
       const body = c.req.valid("json");
 
@@ -137,14 +135,24 @@ cartRoute.openapi(
             cartId: cart.id,
             productId: body.productId,
             quantity: body.quantity,
+            totalPrice: body.quantity * Number(product.price),
           },
           include: { product: { include: { images: true } } },
         });
+
+        const newTotalPrice =
+          Number(cart.totalPrice) + Number(newCartItem.totalPrice);
+        const newTotalQuantity = cart.totalQuantity + newCartItem.quantity;
+
+        await prisma.cart.update({
+          where: { id: cart.id },
+          data: { totalPrice: newTotalPrice, totalQuantity: newTotalQuantity },
+        });
+
         return c.json(newCartItem, 200);
       }
 
       // IF EXIST CART ITEM = EXISTING PRODUCT TO ADD
-
       const totalQuantity = existingCartItem.quantity + body.quantity;
       if (totalQuantity <= 0) {
         return c.json({ message: "Total quantity cannot be less than 0" }, 400);
@@ -158,8 +166,19 @@ cartRoute.openapi(
 
       const updatedCartItem = await prisma.cartItem.update({
         where: { id: existingCartItem.id },
-        data: { quantity: totalQuantity },
+        data: {
+          quantity: totalQuantity,
+          totalPrice: totalQuantity * Number(product.price),
+        },
         include: { product: { include: { images: true } } },
+      });
+
+      const newTotalPrice =
+        Number(cart.totalPrice) + Number(existingCartItem.totalPrice);
+      const newTotalQuantity = cart.totalQuantity + existingCartItem.quantity;
+      await prisma.cart.update({
+        where: { id: cart.id },
+        data: { totalPrice: newTotalPrice, totalQuantity: newTotalQuantity },
       });
 
       return c.json(updatedCartItem, 200);

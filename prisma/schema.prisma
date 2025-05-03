@@ -108,6 +108,9 @@ model Cart {
 
   items CartItem[]
 
+  totalPrice    Decimal @default(0)
+  totalQuantity Int     @default(0)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -121,7 +124,8 @@ model CartItem {
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
 
-  quantity Int @default(1)
+  quantity   Int     @default(1)
+  totalPrice Decimal @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
