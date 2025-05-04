@@ -197,7 +197,7 @@ cartRoute.openapi(
     method: "delete",
     path: "/items/:id",
     security: [{ Bearer: [] }],
-    middleware: checkAuthorized,
+    middleware: [checkAuthorized, checkCart],
     request: { params: z.object({ id: z.string() }) },
     responses: {
       200: {
@@ -226,6 +226,19 @@ cartRoute.openapi(
       if (!cartItem) {
         return c.json({ message: "Cart item not found" }, 404);
       }
+
+      const cart = c.get("cart");
+      const newCartTotalQuantity = cart.totalQuantity - cartItem.quantity;
+      const newTotalPrice =
+        Number(cart.totalPrice) - Number(cartItem.totalPrice);
+
+      await prisma.cart.update({
+        where: { id: cart.id },
+        data: {
+          totalQuantity: newCartTotalQuantity,
+          totalPrice: newTotalPrice,
+        },
+      });
 
       return c.json(cartItem, 200);
     } catch (error) {
