@@ -1,5 +1,4 @@
 import { Prisma } from "@prisma/client";
-
 import { prisma } from "~/lib/prisma";
 import { seedDataCategories } from "~/modules/category/data";
 import { seedDataProducts } from "~/modules/product/data";

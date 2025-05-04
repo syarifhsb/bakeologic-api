@@ -108,7 +108,7 @@ export const seedDataProducts: SeedProduct[] = [
     stockQuantity: 15,
     images: [
       {
-        url: "https://media.istockphoto.com/id/524265513/photo/homemade-peppermint-hot-chocolate.jpg?b=1&s=612x612&w=0&k=20&c=leZdSMPfIaN0OXHhrF2_exONkk8oscCEk4hc0OEmNxs=",
+        url: "https://ucarecdn.com/87d39c6f-f57b-472d-961d-5b573cd5a1e7/-/preview/612x408/",
         altText: "Hot Chocolate",
       },
     ],
