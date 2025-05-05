@@ -259,7 +259,7 @@ cartRoute.openapi(
     method: "patch",
     path: "/items/:id",
     security: [{ Bearer: [] }],
-    middleware: checkAuthorized,
+    middleware: [checkAuthorized, checkCart],
     request: {
       params: z.object({ id: z.string() }),
       body: {
@@ -298,13 +298,39 @@ cartRoute.openapi(
         return c.json({ message: "Cart item not found" }, 404);
       }
 
-      const { quantity } = body;
+      const product = await prisma.product.findUnique({
+        where: { id: cartItem.productId },
+      });
+
+      if (!product) {
+        return c.json({ message: "Product not found" }, 404);
+      }
+
+      const { quantity: newQuantity } = body;
+      const newSubtotalPrice = Number(product.price) * newQuantity;
+
+      const cart = c.get("cart");
+      const newCartTotalQuantity =
+        cart.totalQuantity - cartItem.quantity + newQuantity;
+      const newTotalPrice =
+        Number(cart.totalPrice) -
+        Number(cartItem.totalPrice) +
+        newSubtotalPrice;
+
+      await prisma.cart.update({
+        where: { id: cart.id },
+        data: {
+          totalQuantity: newCartTotalQuantity,
+          totalPrice: newTotalPrice,
+        },
+      });
 
       const updatedCartItem = await prisma.cartItem.update({
         where: { id },
-        data: { quantity },
+        data: { quantity: newQuantity, totalPrice: newSubtotalPrice },
         include: { product: true },
       });
+
       return c.json(updatedCartItem, 200);
     } catch (error) {
       console.error(error);
