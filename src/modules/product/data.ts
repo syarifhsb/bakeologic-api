@@ -102,7 +102,8 @@ export const seedDataProducts: SeedProduct[] = [
   {
     slug: "hot-chocolate",
     name: "Hot Chocolate",
-    description: "",
+    description:
+      "Indulge in the creamy richness of our Hot Chocolate. Made with premium cocoa and steamed milk, this drink offers a velvety smooth texture with a deep, satisfying chocolate flavor. Topped with whipped cream, it's the perfect cozy treat for any chilly day.",
     price: 4.5,
     categorySlug: "beverages",
     stockQuantity: 15,
