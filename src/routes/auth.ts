@@ -126,7 +126,7 @@ authRoute.openapi(
       return c.json({ user: userWithoutPassword, token }, 200);
     } catch (error) {
       console.error(error);
-      return c.json({ message: "Failed to register new user", error }, 500);
+      return c.json({ message: "Failed to login user", error }, 500);
     }
   }
 );
@@ -157,7 +157,7 @@ authRoute.openapi(
       return c.json(user, 200);
     } catch (error) {
       console.error(error);
-      return c.json({ message: "Failed to register new user", error }, 500);
+      return c.json({ message: "Failed to authenticate user", error }, 500);
     }
   }
 );

@@ -174,7 +174,7 @@ cartRoute.openapi(
       });
 
       const newTotalPrice =
-        Number(cart.totalPrice) + Number(existingCartItem.totalPrice);
+        Number(cart.totalPrice) + Number(body.quantity) * Number(product.price);
       const newTotalQuantity = cart.totalQuantity + body.quantity;
       await prisma.cart.update({
         where: { id: cart.id },
