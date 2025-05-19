@@ -155,13 +155,23 @@ cartRoute.openapi(
       // IF EXIST CART ITEM = EXISTING PRODUCT TO ADD
       const totalQuantity = existingCartItem.quantity + body.quantity;
       if (totalQuantity <= 0) {
-        return c.json({ message: "Total quantity cannot be less than 0" }, 400);
+        return c.json(
+          {
+            message: `Total quantity cannot be less than 0. ${totalQuantity} total requested.`,
+          },
+          400
+        );
       }
 
       const isTotalQuantityLessEqualThanStock =
         totalQuantity <= product.stockQuantity;
       if (!isTotalQuantityLessEqualThanStock) {
-        return c.json({ message: "Total quantity is greater than stock" }, 400);
+        return c.json(
+          {
+            message: `Total quantity is greater than stock. ${totalQuantity} total requested.`,
+          },
+          400
+        );
       }
 
       const updatedCartItem = await prisma.cartItem.update({
