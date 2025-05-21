@@ -1,9 +1,16 @@
 import { z } from "zod";
 import { UserSchema as GeneratedUserSchema } from "@/prisma/generated/zod";
 
-export const PrivateUserSchema = GeneratedUserSchema;
+export const PhoneNumberSchema = z.string().regex(/^\+[1-9]\d{1,14}$/, {
+  message: "Phone number is not valid. Please use the format +12345678901",
+});
 
-export const PublicUserSchema = GeneratedUserSchema.omit({
+export const PrivateUserSchema = GeneratedUserSchema.extend({
+  email: z.string().email(),
+  phoneNumber: PhoneNumberSchema,
+});
+
+export const PublicUserSchema = PrivateUserSchema.omit({
   email: true,
   phoneNumber: true,
 });

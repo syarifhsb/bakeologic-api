@@ -1,15 +1,17 @@
 import { createRoute, OpenAPIHono } from "@hono/zod-openapi";
-import { PrivateUserSchema, PublicUserSchema } from "~/modules/user/schema";
-import { ResponseErrorSchema } from "~/modules/common/schema";
+import { Prisma } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { hashPassword, verifyPassword } from "~/lib/password";
 import { prisma } from "~/lib/prisma";
+import { signToken } from "~/lib/token";
+import { checkAuthorized } from "~/modules/auth/middleware";
 import {
   RequestLoginSchema,
   RequestRegisterSchema,
   ResponseLoginSuccessSchema,
 } from "~/modules/auth/schema";
-import { hashPassword, verifyPassword } from "~/lib/password";
-import { signToken } from "~/lib/token";
-import { checkAuthorized } from "~/modules/auth/middleware";
+import { ResponseErrorSchema } from "~/modules/common/schema";
+import { PrivateUserSchema, PublicUserSchema } from "~/modules/user/schema";
 
 export const authRoute = new OpenAPIHono();
 
@@ -33,7 +35,7 @@ authRoute.openapi(
         description: "Successfully registered new user",
         content: { "application/json": { schema: PublicUserSchema } },
       },
-      500: {
+      400: {
         description: "Failed to register new user",
         content: { "application/json": { schema: ResponseErrorSchema } },
       },
@@ -56,7 +58,15 @@ authRoute.openapi(
       return c.json(newUser, 200);
     } catch (error) {
       console.error(error);
-      return c.json({ message: "Failed to register new user", error }, 500);
+
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        return c.json({ message: "Username already exists", error }, 400);
+      }
+
+      return c.json({ message: "Failed to register new user", error }, 400);
     }
   }
 );

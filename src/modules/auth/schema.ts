@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { UserSchema as GeneratedUserSchema } from "@/prisma/generated/zod";
-import { PublicUserSchema } from "~/modules/user/schema";
+import { PrivateUserSchema, PublicUserSchema } from "~/modules/user/schema";
 
 export const UsernameSchema = z
   .string()
@@ -10,7 +10,7 @@ export const PasswordSchema = z
   .string()
   .min(8, { message: "Password must be at least 8 characters long" });
 
-export const UserSchema = GeneratedUserSchema.extend({
+export const UserSchema = PrivateUserSchema.extend({
   username: UsernameSchema,
   password: PasswordSchema,
 });
