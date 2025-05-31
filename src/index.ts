@@ -1,5 +1,5 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { apiReference } from "@scalar/hono-api-reference";
+import { Scalar } from "@scalar/hono-api-reference";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { ENV } from "./env";
@@ -21,11 +21,16 @@ app
   .route("/auth", authRoute)
   .route("/cart", cartRoute);
 
+const openAPIConfig = {
+  openapi: "3.1.1",
+  info: { title: "Bakeologic API", version: "1.0.0" },
+};
+
+const openAPIReference = app.getOpenAPIDocument(openAPIConfig);
+console.log(openAPIReference);
+
 app
-  .doc("/openapi.json", {
-    openapi: "3.1.1",
-    info: { title: "Bakeologic API", version: "1.0.0" },
-  })
+  .doc("/openapi.json", openAPIConfig)
   .openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
     type: "http",
     scheme: "bearer",
@@ -33,7 +38,14 @@ app
     // Authorization: Bearer <token>
   });
 
-app.get("/", apiReference({ spec: { url: "/openapi.json" } }));
+app.get(
+  "/",
+  Scalar({
+    url: "/openapi.json",
+    pageTitle: "Bakeologic API Reference",
+    theme: "deepSpace",
+  })
+);
 
 console.info(`Server is running on port :${ENV.PORT}`);
 
